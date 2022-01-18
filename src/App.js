@@ -1,36 +1,44 @@
-import React from 'react';
-import './App.css';
-import GuardedRoute from './GuardedRoute';
-import Login from './Login';
-import {Route, Routes} from 'react-router-dom'
-import { authenticationService } from './services/authentication';  
-const Home=()=>{
-  return(
-    <div><h1>home</h1></div>
-  )
-}
+import React from "react";
+import "./App.css";
+import GuardedRoute from "./GuardedRoute";
+import Login from "./Login";
+import { Route, Routes } from "react-router-dom";
+import { authenticationService } from "./services/authentication";
+const Home = (props) => {
+	return <h1>home</h1>;
+};
+const Protected = () => {
+	return (
+		<div>
+			<h1>protected</h1>
+		</div>
+	);
+};
 const App = () => {
-  const loginUser = (login, password) => {
-    const userCredentials = {
-      login,
-      password
-    };
+	const loginUser = (login, password) => {
+		const userCredentials = {
+			login,
+			password,
+		};
 
-    authenticationService.login(userCredentials)
-      .then(loginData => window.localStorage.setItem('token', loginData.token));
-  }
+//si mes mots de passe sont bon alors setItem token
+		authenticationService
+			.login(userCredentials)
+			.then((loginData) => window.localStorage.setItem("token", loginData.token))
+			.catch((e) => alert("Mot de passe erroné !"));
+	};
 
-  return (
-    <div className="App">
-      <Routes>
-        <Route exact path='/' component={Home} />
-        <Route path='/login' component={() => <Login loginUser={(login, password) => loginUser(login, password)} />} />
-        <GuardedRoute path='/protected' component={Protected} auth={window.localStorage.getItem('token')}/>
-      </Routes>
-    </div>
-  );
-}
+	return (
+		<div className="App">
+			<Routes>
+				<Route path="/" element={<Home />} />
+				<Route path="/protected" element={<GuardedRoute />}>
+					<Route element={<Protected />} />
+				</Route>
+				<Route path="/login" element={<Login loginUser={(login, password) => loginUser(login, password)} />} />
+			</Routes>
+		</div>
+	);
+};
 
 export default App;
-
-
