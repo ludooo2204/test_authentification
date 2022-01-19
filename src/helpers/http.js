@@ -10,9 +10,9 @@ instance.defaults.headers.post['Content-Type'] = 'application/json'
 
 instance.interceptors.request.use(config => {
     const token = window.localStorage.getItem('token');
-console.log(token)
-console.log(token)
-console.log(token)
+console.log("token")
+console.log("token")
+console.log("token")
 console.log(token)
     if (token) {
       config.headers['X-Auth-Token'] = token;

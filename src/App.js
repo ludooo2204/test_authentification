@@ -12,6 +12,11 @@ const Protected = () => {
 	return (
 		<div>
 			<h1>protected</h1>
+			<h1>protected</h1>
+			<h1>protected</h1>
+			<h1>protected</h1>
+			<h1>protected</h1>
+			<h1>protected</h1>
 		</div>
 	);
 };
@@ -40,9 +45,9 @@ const App = () => {
 	return (
 		<div className="App">
 			<Routes>
-				<Route path="/" element={<Home />} />
+				<Route path="/" element={<Protected />} />
 				<Route path="/protected" element={<GuardedRoute />}>
-					<Route element={<Protected />} />
+					<Route path="/protected" element={<Protected />} />
 				</Route>
 				<Route path="/login" element={<Login loginUser={(login, password) => loginUser(login, password)} />} />
 			</Routes>

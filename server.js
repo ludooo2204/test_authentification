@@ -10,9 +10,30 @@ const key = "MuchSecretVerySecureSoSafe";
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// app.use("/login", (req, res, next) => {
+app.use((req, res, next) => {
+	if (req.method === "POST" && req.path === "/login") {
+		if (req.body.login === "admin" && req.body.password === "admin") {
+			console.log("toto");
 
-// });
+			console.log("req");
+			console.log(req.body);
+			const token = jwt.sign(data, key);
+			console.log("token");
+			console.log(token);
+			const theSecretRevealed = jwt.verify(token, key);
+console.log("theSecretRevealed");
+console.log(theSecretRevealed);
+
+			res.status(200).json({ token });
+			next();
+		} else {
+			console.log("tata");
+			res.status(400).json({ message: " wrong password" });
+		}
+	} else {
+		next();
+	}
+});
 app.get("/", (req, res) => {
 	console.log("log");
 	res.send("coucou");
@@ -22,18 +43,11 @@ app.post("/", (req, res) => {
 
 	console.log(req.body);
 });
-app.post("/login", (req, res) => {
-
-	
-	console.log("req");
-	console.log("req");
-	console.log("req");
-
-	console.log(req.body);
-	const token = jwt.sign(data, key);
-	console.log("token");
-	console.log(token);
+app.use(function (req, res, next) {
+	console.log("Time:", Date.now());
+	next();
 });
+app.post("/login", (req, res) => {});
 app.listen(3001, () => {
 	console.log("connécté");
 });
