@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import GuardedRoute from "./GuardedRoute";
 import Login from "./Login";
 import { Route, Routes } from "react-router-dom";
 import { authenticationService } from "./services/authentication";
+import axios from "axios";
 const Home = (props) => {
 	return <h1>home</h1>;
 };
@@ -15,6 +16,14 @@ const Protected = () => {
 	);
 };
 const App = () => {
+// useEffect(() => {
+// 	console.log("coucou");
+// 	let don={}
+// 	don.a="toto"
+// console.log(don);
+//  axios.post("http://localhost:3001/",don)
+// }, []);
+
 	const loginUser = (login, password) => {
 		const userCredentials = {
 			login,

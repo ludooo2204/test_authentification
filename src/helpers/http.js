@@ -1,9 +1,11 @@
 import axios from 'axios'
 
 const instance = axios.create({
-    baseURL:'http://localhost:3004'
+    baseURL:'http://localhost:3001'
+    // baseURL:'http://localhost:3004'
 })
 
+console.log("coucoucoucocu");
 instance.defaults.headers.post['Content-Type'] = 'application/json'
 
 instance.interceptors.request.use(config => {
