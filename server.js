@@ -2,6 +2,29 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const app = express();
+
+let mysql = require("mysql");
+let con = mysql.createConnection({
+	host: "localhost",
+	user: "root",
+	password: "",
+	database: "api",
+});
+con.connect(function (err) {
+	if (err) throw err;
+	console.log("connected!!");
+	con.query("SELECT * FROM etalonnages", function (err, result) {
+		if (err) throw err;
+		// result.forEach((element) => {
+		// 	console.log(element);
+		// });
+		// console.log(Object.keys(result));
+		console.log(result[0]);
+		console.log(JSON.parse(result[0].ptsEtalonnage));
+		console.log(result.length);
+	});
+});
+
 const jwt = require("jsonwebtoken");
 
 const key = "MuchSecretVerySecureSoSafe";
@@ -18,7 +41,7 @@ app.use((req, res, next) => {
 		if (req.body.login === "admin" && req.body.password === "admin") {
 			const data = { user: "ludovic vachon" };
 
-			const token = jwt.sign({data, exp: Math.floor(Date.now() / 1000) + (10)}, key);
+			const token = jwt.sign({ data, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 }, key); //1jour
 			console.log("token");
 			console.log(token);
 			// const theSecretRevealed = jwt.verify(token, key);
@@ -42,10 +65,10 @@ app.get("/api/user", (req, res) => {
 	try {
 		const theSecretRevealed = jwt.verify(token, key);
 		res.send({ test: "data" });
-	  } catch(err) {
+	} catch (err) {
 		console.log("err");
 		console.log(err);
-	  }
+	}
 });
 app.post("/", (req, res) => {
 	console.log("req");
