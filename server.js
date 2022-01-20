@@ -4,26 +4,24 @@ const bodyParser = require("body-parser");
 const app = express();
 const jwt = require("jsonwebtoken");
 
-const data = { some: "json" };
 const key = "MuchSecretVerySecureSoSafe";
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use((req, res, next) => {
+	console.log("middleware Loggin test");
+	next();
+});
+app.use((req, res, next) => {
 	if (req.method === "POST" && req.path === "/login") {
 		if (req.body.login === "admin" && req.body.password === "admin") {
-			console.log("toto");
+			const data = { user: "ludovic vachon" };
 
-			console.log("req");
-			console.log(req.body);
-			const token = jwt.sign(data, key);
+			const token = jwt.sign({data, exp: Math.floor(Date.now() / 1000) + (10)}, key);
 			console.log("token");
 			console.log(token);
-			const theSecretRevealed = jwt.verify(token, key);
-console.log("theSecretRevealed");
-console.log(theSecretRevealed);
-
+			// const theSecretRevealed = jwt.verify(token, key);
 			res.status(200).json({ token });
 			next();
 		} else {
@@ -34,9 +32,20 @@ console.log(theSecretRevealed);
 		next();
 	}
 });
+
 app.get("/", (req, res) => {
 	console.log("log");
 	res.send("coucou");
+});
+app.get("/api/user", (req, res) => {
+	const token = req.header("x-auth-token");
+	try {
+		const theSecretRevealed = jwt.verify(token, key);
+		res.send({ test: "data" });
+	  } catch(err) {
+		console.log("err");
+		console.log(err);
+	  }
 });
 app.post("/", (req, res) => {
 	console.log("req");
@@ -47,7 +56,7 @@ app.use(function (req, res, next) {
 	console.log("Time:", Date.now());
 	next();
 });
-app.post("/login", (req, res) => {});
+// app.post("/login", (req, res) => {});
 app.listen(3001, () => {
 	console.log("connécté");
 });
